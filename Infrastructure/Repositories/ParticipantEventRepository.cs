@@ -49,7 +49,7 @@ namespace Infrastructure.Repositories
 
         public async Task RemoveAsync(ParticipantEvent participantEvent, CancellationToken cancellationToken)
         {
-            _context.ParticipantEvents.Remove(participantEvent);  // Удаление записи
+            _context.ParticipantEvents.Remove(participantEvent);  
             await _context.SaveChangesAsync(cancellationToken);
         }
     }

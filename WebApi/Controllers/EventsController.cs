@@ -1,16 +1,14 @@
 ﻿using Application.UseCases.Events.Create;
 using Application.UseCases.Events.Get;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
-using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using Application.UseCases.Events.Delete;
 using Application.UseCases.Events.Update;
 using Application.UseCases.DTOs;
-using Application.UseCases.EventParticipant;
 using Domain.Entities;
 using Application.UseCases.Participant.Get;
+using Application.UseCases.EventParticipant.Create;
+using Application.UseCases.EventParticipant.Delete;
 
 namespace WebApi.Controllers
 {
@@ -115,9 +113,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<ActionResult> GetAll(CancellationToken cancellationToken = default, int pageNumber = 1, int pageSize = 10)
         {
-            var events = await _getAllEventsUseCase.ExecuteAsync(cancellationToken);
+            var events = await _getAllEventsUseCase.ExecuteAsync(cancellationToken, pageNumber, pageSize);
             return Ok(events);
         }
 

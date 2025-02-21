@@ -1,24 +1,19 @@
 ﻿using Application.UseCases.DTOs;
 using AutoMapper;
-using Domain.Interfaces.RepositoryInterfaces;
+using Domain.Interfaces;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UseCases.Events.Update
 {
     public class UpdateEventUseCase : IUpdateEventUseCase
     {
-        private readonly IEventRepository _eventRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IValidator<EventDTO> _eventUpdateValidator;
 
-        public UpdateEventUseCase(IEventRepository eventRepository, IMapper mapper, IValidator<EventDTO> eventUpdateValidator)
+        public UpdateEventUseCase(IUnitOfWork unitOfWork, IMapper mapper, IValidator<EventDTO> eventUpdateValidator)
         {
-            _eventRepository = eventRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _eventUpdateValidator = eventUpdateValidator;
         }
@@ -31,7 +26,7 @@ namespace Application.UseCases.Events.Update
                 throw new ValidationException(validationResult.Errors);
             }
 
-            var existingEvent = await _eventRepository.GetByIdAsync(id, cancellationToken);
+            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id, cancellationToken);
             if (existingEvent == null)
             {
                 throw new KeyNotFoundException($"Event with ID {id} not found.");
@@ -39,7 +34,7 @@ namespace Application.UseCases.Events.Update
 
             _mapper.Map(eventDto, existingEvent);
 
-            await _eventRepository.UpdateAsync(existingEvent, cancellationToken);
+            await _unitOfWork.EventRepository.UpdateAsync(existingEvent, cancellationToken);
         }
     }
 }

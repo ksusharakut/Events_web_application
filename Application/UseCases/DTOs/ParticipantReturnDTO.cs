@@ -1,6 +1,4 @@
-﻿using Domain.Enums;
-
-namespace Application.UseCases.DTOs
+﻿namespace Application.UseCases.DTOs
 {
     public class ParticipantReturnDTO
     {

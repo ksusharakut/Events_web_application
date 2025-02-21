@@ -1,32 +1,25 @@
-﻿using Domain.Interfaces.RepositoryInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Interfaces;
 
 namespace Application.UseCases.Events.Delete
 {
     public class DeleteEventUseCase : IDeleteEventUseCase
     {
-        private readonly IEventRepository _eventRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteEventUseCase(IEventRepository eventRepository)
+        public DeleteEventUseCase(IUnitOfWork unitOfWork)
         {
-            _eventRepository = eventRepository;
+            _unitOfWork = unitOfWork;
         }
-
-        //TODO: отредачить всё в одном стиле
 
         public async Task ExecuteAsync(int eventId, CancellationToken cancellationToken)
         {
-            var eventEntity = await _eventRepository.GetByIdAsync(eventId, cancellationToken);
+            var eventEntity = await _unitOfWork.EventRepository.GetByIdAsync(eventId, cancellationToken);
             if (eventEntity == null)
             {
-                throw new KeyNotFoundException($"Событие с ID {eventId} не найдено.");
+                throw new KeyNotFoundException($"No event with id {eventId}.");
             }
 
-            await _eventRepository.DeleteAsync(eventEntity, cancellationToken);
+            await _unitOfWork.EventRepository.DeleteAsync(eventEntity, cancellationToken);
         }
     }
 }

@@ -1,23 +1,18 @@
 ﻿using Application.Common;
-using Application.Services;
 using Application.UseCases.DTOs;
-using Domain.Entities;
 using Domain.Interfaces;
 using FluentValidation;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.UseCases.Authorization.LogIn
 {
-    public class LogInParticipantHandler : ILogInParticipantUseCase
+    public class LogInParticipantUseCase : ILogInParticipantUseCase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITokenService _tokenService;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IValidator<ParticipantLoginDTO> _validator;
 
-        public LogInParticipantHandler(IUnitOfWork unitOfWork, ITokenService tokenService,
+        public LogInParticipantUseCase(IUnitOfWork unitOfWork, ITokenService tokenService,
             IPasswordHasher passwordHasher, IValidator<ParticipantLoginDTO> validator)
         {
             _unitOfWork = unitOfWork;
@@ -26,7 +21,7 @@ namespace Application.UseCases.Authorization.LogIn
             _validator = validator;
         }
 
-        public async Task<AuthResultDTO> Handle(ParticipantLoginDTO request, CancellationToken cancellationToken)
+        public async Task<AuthResultDTO> ExecuteAsync(ParticipantLoginDTO request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)

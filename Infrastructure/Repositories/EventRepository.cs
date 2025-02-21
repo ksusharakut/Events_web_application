@@ -33,9 +33,12 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Event>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Event>> GetAllAsync(CancellationToken cancellationToken, int pageNumber, int pageSize)
         {
-            return await _context.Events.ToListAsync(cancellationToken);
+            return await _context.Events
+                                 .Skip((pageNumber - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .ToListAsync(cancellationToken);
         }
 
         public async Task<Event?> GetByIdAsync(int id, CancellationToken cancellationToken)

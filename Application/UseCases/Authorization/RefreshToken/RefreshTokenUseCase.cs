@@ -3,16 +3,16 @@ using Application.UseCases.DTOs;
 
 namespace Application.UseCases.Authorization.RefreshToken
 {
-    public class RefreshTokenHandler : IRefreshTokenUseCase
+    public class RefreshTokenUseCase : IRefreshTokenUseCase
     {
         private readonly ITokenService _tokenService;
 
-        public RefreshTokenHandler(ITokenService tokenService)
+        public RefreshTokenUseCase(ITokenService tokenService)
         {
             _tokenService = tokenService;
         }
 
-        public async Task<AuthResultDTO> Handle(RefreshTokenRequest request, CancellationToken cancellationToken)
+        public async Task<AuthResultDTO> ExecuteAsync(RefreshTokenRequest request, CancellationToken cancellationToken)
         {
             var refreshToken = request.RefreshToken;
             var participant = _tokenService.GetParticipantByRefreshToken(refreshToken);

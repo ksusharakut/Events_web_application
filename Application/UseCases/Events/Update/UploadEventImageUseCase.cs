@@ -1,23 +1,17 @@
-﻿using Domain.Interfaces.RepositoryInterfaces;
+﻿using Application.Common;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UseCases.Events.Update
 {
     public class UploadEventImageUseCase : IUploadEventImageUseCase
     {
-        private readonly IEventRepository _eventRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly string _imageStoragePath = "wwwroot/images/events";
-        private const long MaxFileSize = 5 * 1024 * 1024; // 5 MB
-        private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
 
-        public UploadEventImageUseCase(IEventRepository eventRepository)
+        public UploadEventImageUseCase(IUnitOfWork unitOfWork)
         {
-            _eventRepository = eventRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(int eventId, IFormFile imageFile, CancellationToken cancellationToken)
@@ -25,14 +19,14 @@ namespace Application.UseCases.Events.Update
             if (imageFile == null || imageFile.Length == 0)
                 throw new ArgumentException("Invalid image file.");
 
-            if (imageFile.Length > MaxFileSize)
+            if (imageFile.Length > FileConstants.MaxFileSize)
                 throw new ArgumentException("File size exceeds the maximum allowed size of 5 MB.");
 
             var fileExtension = Path.GetExtension(imageFile.FileName).ToLower();
-            if (!AllowedExtensions.Contains(fileExtension))
+            if (!FileConstants.AllowedExtensions.Contains(fileExtension))
                 throw new ArgumentException("Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.");
 
-            var eventEntity = await _eventRepository.GetByIdAsync(eventId, cancellationToken);
+            var eventEntity = await _unitOfWork.EventRepository.GetByIdAsync(eventId, cancellationToken);
             if (eventEntity == null)
                 throw new KeyNotFoundException("Event not found.");
 
@@ -49,7 +43,7 @@ namespace Application.UseCases.Events.Update
                 await imageFile.CopyToAsync(stream, cancellationToken);
             }
 
-            await _eventRepository.UpdateImagePathAsync(eventEntity, filePath, cancellationToken);
+            await _unitOfWork.EventRepository.UpdateImagePathAsync(eventEntity, filePath, cancellationToken);
         }
     }
 

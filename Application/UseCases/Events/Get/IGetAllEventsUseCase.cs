@@ -4,6 +4,6 @@ namespace Application.UseCases.Events.Get
 {
     public interface IGetAllEventsUseCase
     {
-        Task<IEnumerable<EventReturnDTO>> ExecuteAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<EventReturnDTO>> ExecuteAsync(CancellationToken cancellationToken, int pageNumber, int pageSize);
     }
 }

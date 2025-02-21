@@ -1,10 +1,5 @@
 ﻿using Application.Common;
 using Microsoft.AspNetCore.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
@@ -24,7 +19,6 @@ namespace Infrastructure.Services
                 return string.Empty;
             }
 
-            // Предположим, что изображения находятся в папке wwwroot/images
             var imageUrl = Path.Combine("images", Path.GetFileName(imagePath));
             return $"{_webHostEnvironment.WebRootPath}/{imageUrl}";
         }

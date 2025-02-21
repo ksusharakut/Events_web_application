@@ -4,6 +4,8 @@ using Application.UseCases.Authorization.RefreshToken;
 using Application.UseCases.Authorization.Register;
 using Application.UseCases.Authorization.Register.Validators;
 using Application.UseCases.EventParticipant;
+using Application.UseCases.EventParticipant.Create;
+using Application.UseCases.EventParticipant.Delete;
 using Application.UseCases.Events.Create;
 using Application.UseCases.Events.Delete;
 using Application.UseCases.Events.Get;
@@ -77,9 +79,10 @@ namespace WebApi
         public static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<ILogInParticipantUseCase, LogInParticipantHandler>();
-            services.AddScoped<IRefreshTokenUseCase, RefreshTokenHandler>();
-            services.AddScoped<IRegisterParticipantUseCase, RegisterParticipantHandler>();
+            services.AddScoped<IFileValidator, FileValidator>();
+            services.AddScoped<ILogInParticipantUseCase, LogInParticipantUseCase>();
+            services.AddScoped<IRefreshTokenUseCase, RefreshTokenUseCase>();
+            services.AddScoped<IRegisterParticipantUseCase, RegisterParticipantUseCase>();
             services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
             services.AddScoped<IAgeValidationService, AgeValidationService>();
             services.AddAutoMapper(typeof(ParticipantMappingProfile));

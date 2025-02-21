@@ -4,6 +4,6 @@ namespace Application.UseCases.Authorization.LogIn
 {
     public interface ILogInParticipantUseCase
     {
-        Task<AuthResultDTO> Handle(ParticipantLoginDTO request, CancellationToken cancellationToken);
+        Task<AuthResultDTO> ExecuteAsync(ParticipantLoginDTO request, CancellationToken cancellationToken);
     }
 }

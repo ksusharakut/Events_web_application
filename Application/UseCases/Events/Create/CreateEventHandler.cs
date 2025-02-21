@@ -1,11 +1,8 @@
-﻿using Application.Common;
-using Application.UseCases.DTOs;
+﻿using Application.UseCases.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
-using Domain.Interfaces.RepositoryInterfaces;
 using FluentValidation;
-using System;
 
 namespace Application.UseCases.Events.Create
 {
@@ -24,8 +21,6 @@ namespace Application.UseCases.Events.Create
             _validator = validator;
         }
 
-
-        //TODO: нельзя создать 2 события с одинаковым названием 
         public async Task ExecuteAsync(EventDTO eventDto, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(eventDto);

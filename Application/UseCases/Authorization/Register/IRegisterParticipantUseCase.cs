@@ -4,6 +4,6 @@ namespace Application.UseCases.Authorization.Register
 {
     public interface IRegisterParticipantUseCase
     {
-        Task Handle(ParticipantRegistrationDTO request, CancellationToken cancellationToken);
+        Task ExecuteAsync(ParticipantRegistrationDTO request, CancellationToken cancellationToken);
     }
 }

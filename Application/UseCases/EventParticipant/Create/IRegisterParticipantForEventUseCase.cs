@@ -1,11 +1,6 @@
 ﻿using Application.UseCases.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.UseCases.EventParticipant
+namespace Application.UseCases.EventParticipant.Create
 {
     public interface IRegisterParticipantForEventUseCase
     {

@@ -6,7 +6,7 @@ namespace Domain.Interfaces.RepositoryInterfaces
     {
         Task<Event?> GetByIdAsync(int id, CancellationToken cancellationToken);
         Task<Event?> GetByTitleAsync(string title, CancellationToken cancellationToken);
-        Task<IEnumerable<Event>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<Event>> GetAllAsync(CancellationToken cancellationToken, int pageNumber, int pageSize);
         Task AddAsync(Event eventEntity, CancellationToken cancellationToken);
         Task UpdateAsync(Event eventEntity, CancellationToken cancellationToken);
         Task DeleteAsync(Event eventEntity, CancellationToken cancellationToken);

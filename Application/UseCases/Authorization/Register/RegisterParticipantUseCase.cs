@@ -1,22 +1,20 @@
 ﻿using Application.Common;
 using Application.UseCases.DTOs;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces;
-using Domain.Interfaces.RepositoryInterfaces;
 using FluentValidation;
 
 namespace Application.UseCases.Authorization.Register
 {
-    public class RegisterParticipantHandler : IRegisterParticipantUseCase
+    public class RegisterParticipantUseCase : IRegisterParticipantUseCase
     {
         private readonly IPasswordHasher _passwordHasher;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IValidator<ParticipantRegistrationDTO> _validator;
 
-        public RegisterParticipantHandler(IPasswordHasher passwordHasher,
+        public RegisterParticipantUseCase(IPasswordHasher passwordHasher,
         IUnitOfWork unitOfWork,
         IMapper mapper,
         IValidator<ParticipantRegistrationDTO> validator)
@@ -27,7 +25,7 @@ namespace Application.UseCases.Authorization.Register
             _validator = validator;
         }
 
-        public async Task Handle(ParticipantRegistrationDTO request, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(ParticipantRegistrationDTO request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)

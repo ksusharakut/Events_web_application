@@ -2,7 +2,6 @@
 using Application.UseCases.Authorization.RefreshToken;
 using Application.UseCases.Authorization.Register;
 using Application.UseCases.DTOs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -29,7 +28,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] ParticipantRegistrationDTO request)
         {
-            await _registerParticipantUseCase.Handle(request, HttpContext.RequestAborted);
+            await _registerParticipantUseCase.ExecuteAsync(request, HttpContext.RequestAborted);
 
             return Ok("Registration successful");
         }
@@ -37,14 +36,14 @@ namespace WebApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LogIn(ParticipantLoginDTO loginDto)
         {
-            var result = await _logInUseCase.Handle(loginDto, CancellationToken.None);
+            var result = await _logInUseCase.ExecuteAsync(loginDto, CancellationToken.None);
             return Ok(result);
         }
 
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
-            var result = await _refreshTokenUseCase.Handle(request, CancellationToken.None);
+            var result = await _refreshTokenUseCase.ExecuteAsync(request, CancellationToken.None);
             return Ok(result);
         }
     }

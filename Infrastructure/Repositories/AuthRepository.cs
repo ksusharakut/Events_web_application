@@ -27,12 +27,10 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> ValidateCredentialsAsync(string email, string password, CancellationToken cancellationToken)
         {
-            var participant = await GetByEmailAsync(email, cancellationToken);
+            var participant = await _context.Participants
+                .FirstOrDefaultAsync(p => p.Email == email && p.PasswordHash == password, cancellationToken);
 
-            if (participant == null)
-                return false;
-
-            return participant.PasswordHash == password;
+            return participant != null;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Application.UseCases.DTOs;
 using Application.UseCases.Participant.Get;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
