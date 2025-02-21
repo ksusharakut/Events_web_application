@@ -6,13 +6,13 @@ using FluentValidation;
 
 namespace Application.UseCases.Events.Create
 {
-    public class CreateEventHandler : ICreateEventUseCase
+    public class CreateEventUseCase : ICreateEventUseCase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IValidator<EventDTO> _validator;
 
-        public CreateEventHandler(IUnitOfWork unitOfWork,
+        public CreateEventUseCase(IUnitOfWork unitOfWork,
             IMapper mapper,
             IValidator<EventDTO> validator)
         {

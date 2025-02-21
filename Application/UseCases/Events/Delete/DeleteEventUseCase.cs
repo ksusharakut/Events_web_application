@@ -1,4 +1,5 @@
 ﻿using Domain.Interfaces;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Events.Delete
 {
@@ -16,7 +17,7 @@ namespace Application.UseCases.Events.Delete
             var eventEntity = await _unitOfWork.EventRepository.GetByIdAsync(eventId, cancellationToken);
             if (eventEntity == null)
             {
-                throw new KeyNotFoundException($"No event with id {eventId}.");
+                throw new NotFoundException($"No event with id {eventId}.");
             }
 
             await _unitOfWork.EventRepository.DeleteAsync(eventEntity, cancellationToken);

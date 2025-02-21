@@ -2,6 +2,7 @@
 using Application.UseCases.DTOs;
 using Application.UseCases.EventParticipant.Create;
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Interfaces;
 
 namespace Application.UseCases.EventParticipant
@@ -24,19 +25,19 @@ namespace Application.UseCases.EventParticipant
 
             if (currentUserRole != "ParticipantOnly")
             {
-                throw new UnauthorizedAccessException("Only users with the role 'ParticipantOnly' can register for events.");
+                throw new ForbiddenException("Only users with the role 'ParticipantOnly' can register for events.");
             }
 
             var eventEntity = await _unitOfWork.EventRepository.GetByIdAsync(request.EventId, cancellationToken);
             if (eventEntity == null)
             {
-                throw new KeyNotFoundException("Event not found");
+                throw new NotFoundException("Event not found");
             }
 
             var participant = await _unitOfWork.ParticipantRepository.GetByIdAsync(currentUserId, cancellationToken);
             if (participant == null)
             {
-                throw new KeyNotFoundException("Participant not found");
+                throw new NotFoundException("Participant not found");
             }
 
             var existingRegistration = await _unitOfWork.ParticipantEventRepository
@@ -44,15 +45,15 @@ namespace Application.UseCases.EventParticipant
 
             if (existingRegistration != null)
             {
-                throw new InvalidOperationException("Participant is already registered for this event.");
+                throw new ConflictException("Participant is already registered for this event.");
             }
 
             var currentParticipantsCount = await _unitOfWork.ParticipantEventRepository
-        .GetParticipantsCountByEventAsync(eventEntity.Id, cancellationToken);
+                .GetParticipantsCountByEventAsync(eventEntity.Id, cancellationToken);
 
             if (currentParticipantsCount >= eventEntity.MaxParticipants)
             {
-                throw new InvalidOperationException("The event has reached the maximum number of participants.");
+                throw new LimitExceededException("The event has reached the maximum number of participants.");
             }
 
             var participantEvent = new ParticipantEvent

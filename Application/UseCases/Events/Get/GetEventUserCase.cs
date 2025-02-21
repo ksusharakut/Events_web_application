@@ -1,7 +1,7 @@
 ﻿using Application.Common;
 using Application.UseCases.DTOs;
 using AutoMapper;
-using Domain.Interfaces;
+using Domain.Interfaces; 
 
 namespace Application.UseCases.Events.Get
 {

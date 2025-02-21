@@ -1,6 +1,7 @@
 ﻿using Application.Common;
 using Application.UseCases.DTOs;
 using Domain.Interfaces;
+using Domain.Exceptions;
 using FluentValidation;
 
 namespace Application.UseCases.Authorization.LogIn
@@ -29,7 +30,7 @@ namespace Application.UseCases.Authorization.LogIn
 
             var participant = await _unitOfWork.AuthRepository.GetByEmailAsync(request.Email, cancellationToken);
             if (participant == null || !_passwordHasher.VerifyPassword(request.Password, participant.PasswordHash))
-                throw new UnauthorizedAccessException("Invalid email or password.");
+                throw new AuthenticationFailedException("Invalid email or password.");
 
             var accessToken = _tokenService.GenerateAccessToken(participant);
             var refreshToken = _tokenService.GenerateRefreshToken();

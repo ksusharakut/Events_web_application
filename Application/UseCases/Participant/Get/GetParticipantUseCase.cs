@@ -1,6 +1,7 @@
 ﻿using Application.UseCases.DTOs;
 using AutoMapper;
 using Domain.Interfaces;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Participant.Get
 {
@@ -20,7 +21,7 @@ namespace Application.UseCases.Participant.Get
             var participantEntity = await _unitOfWork.EventRepository.GetByIdAsync(participantId, cancellationToken);
             if (participantEntity == null)
             {
-                throw new KeyNotFoundException($"No user with id {participantId}.");
+                throw new NotFoundException($"No user with id {participantId}.");
             }
 
             return _mapper.Map<ParticipantReturnDTO>(participantEntity);

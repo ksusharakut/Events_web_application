@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Domain.Exceptions;
 using Application.UseCases.DTOs;
 
 namespace Application.UseCases.Authorization.RefreshToken
@@ -18,7 +19,7 @@ namespace Application.UseCases.Authorization.RefreshToken
             var participant = _tokenService.GetParticipantByRefreshToken(refreshToken);
             if (participant == null)
             {
-                throw new UnauthorizedAccessException("Invalid or expired refresh token.");
+                throw new InvalidTokenException("Invalid or expired refresh token.");
             }
 
             var newAccessToken = _tokenService.GenerateAccessToken(participant);

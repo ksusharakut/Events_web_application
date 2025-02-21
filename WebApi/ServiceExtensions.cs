@@ -88,7 +88,7 @@ namespace WebApi
             services.AddAutoMapper(typeof(ParticipantMappingProfile));
             services.AddAutoMapper(typeof(EventMappingProfile));
             services.AddValidatorsFromAssemblyContaining<RegisterParticipantValidator>();
-            services.AddScoped<ICreateEventUseCase, CreateEventHandler>();
+            services.AddScoped<ICreateEventUseCase, CreateEventUseCase>();
             services.AddScoped<IGetEventUseCase, GetEventUseCase>();
             services.AddScoped<IGetEventByTitleUseCase, GetEventByTitleUseCase>();
             services.AddScoped<IDeleteEventUseCase, DeleteEventUseCase>();

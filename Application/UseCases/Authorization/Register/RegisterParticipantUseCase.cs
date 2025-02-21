@@ -2,6 +2,7 @@
 using Application.UseCases.DTOs;
 using AutoMapper;
 using Domain.Enums;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using FluentValidation;
 
@@ -36,7 +37,7 @@ namespace Application.UseCases.Authorization.Register
             var existingParticipant = await _unitOfWork.AuthRepository.GetByEmailAsync(request.Email, cancellationToken);
             if (existingParticipant != null)
             {
-                throw new Exception("Email is already in use.");
+                throw new ConflictException("Email is already in use.");
             }
 
             var hashedPassword = _passwordHasher.HashPassword(request.Password);

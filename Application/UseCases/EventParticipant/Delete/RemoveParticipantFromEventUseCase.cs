@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Domain.Interfaces;
+using Domain.Exceptions;
 
 namespace Application.UseCases.EventParticipant.Delete
 {
@@ -21,13 +22,13 @@ namespace Application.UseCases.EventParticipant.Delete
             var eventEntity = await _unitOfWork.EventRepository.GetByIdAsync(eventId, cancellationToken);
             if (eventEntity == null)
             {
-                throw new KeyNotFoundException("Event not found");
+                throw new NotFoundException("Event not found");
             }
 
             var participant = await _unitOfWork.ParticipantRepository.GetByIdAsync(currentUserId, cancellationToken);
             if (participant == null)
             {
-                throw new KeyNotFoundException("Participant not found");
+                throw new NotFoundException("Participant not found");
             }
 
             var participantEvent = await _unitOfWork.ParticipantEventRepository
@@ -35,7 +36,7 @@ namespace Application.UseCases.EventParticipant.Delete
 
             if (participantEvent == null)
             {
-                throw new InvalidOperationException("Participant is not registered for this event");
+                throw new NotRegisteredException("Participant is not registered for this event");
             }
 
             await _unitOfWork.ParticipantEventRepository.RemoveAsync(participantEvent, cancellationToken);

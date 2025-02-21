@@ -2,6 +2,7 @@
 using Application.UseCases.DTOs;
 using AutoMapper;
 using Domain.Interfaces;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Events.Get
 {
@@ -23,7 +24,7 @@ namespace Application.UseCases.Events.Get
             var eventEntity = await _unitOfWork.EventRepository.GetByTitleAsync(title, cancellationToken);
             if (eventEntity == null)
             {
-                throw new KeyNotFoundException($"No event with {title} title.");
+                throw new NotFoundException($"No event with {title} title.");
             }
 
             var eventReturnDTO = _mapper.Map<EventReturnDTO>(eventEntity);

@@ -1,11 +1,7 @@
 ﻿using Application.UseCases.DTOs;
 using AutoMapper;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Participant.Get
 {
@@ -24,7 +20,7 @@ namespace Application.UseCases.Participant.Get
         {
             var eventEntity = await _unitOfWork.EventRepository.GetByIdAsync(eventId, cancellationToken);
             if (eventEntity == null)
-                throw new KeyNotFoundException("Event not found");
+                throw new NotFoundException("Event not found");
 
             var participants = await _unitOfWork.ParticipantEventRepository.GetParticipantsByEventIdAsync(eventEntity, cancellationToken);
             return _mapper.Map<List<ParticipantReturnDTO>>(participants);

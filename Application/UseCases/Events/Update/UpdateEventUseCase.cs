@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Interfaces;
 using FluentValidation;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Events.Update
 {
@@ -29,7 +30,7 @@ namespace Application.UseCases.Events.Update
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id, cancellationToken);
             if (existingEvent == null)
             {
-                throw new KeyNotFoundException($"Event with ID {id} not found.");
+                throw new NotFoundException($"Event with ID {id} not found.");
             }
 
             _mapper.Map(eventDto, existingEvent);

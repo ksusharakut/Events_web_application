@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Infrastructure.Persistance.Data
 {
-    public sealed class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
         public DbSet<Event> Events { get; set; }
         public DbSet<Participant> Participants { get; set; }

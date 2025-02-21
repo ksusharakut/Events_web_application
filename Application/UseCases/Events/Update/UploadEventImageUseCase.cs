@@ -1,6 +1,7 @@
 ﻿using Application.Common;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Domain.Exceptions;
 
 namespace Application.UseCases.Events.Update
 {
@@ -28,7 +29,7 @@ namespace Application.UseCases.Events.Update
 
             var eventEntity = await _unitOfWork.EventRepository.GetByIdAsync(eventId, cancellationToken);
             if (eventEntity == null)
-                throw new KeyNotFoundException("Event not found.");
+                throw new NotFoundException("Event not found.");
 
             string newFileName = $"{eventId}{fileExtension}";
             string filePath = Path.Combine(_imageStoragePath, newFileName);
