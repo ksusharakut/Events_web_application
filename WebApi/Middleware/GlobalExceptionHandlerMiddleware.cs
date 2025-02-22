@@ -46,6 +46,10 @@ namespace WebApi.Middlware
             {
                 await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest); // 400 Bad Request
             }
+            catch (ArgumentException ex)
+            {
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest); // 400 Bad Request
+            }
             catch (ConflictException ex)
             {
                 await HandleExceptionAsync(httpContext, ex, HttpStatusCode.Conflict); // 409 Conflict
@@ -58,6 +62,7 @@ namespace WebApi.Middlware
             {
                 await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError); // 500 Internal Server Error
             }
+
         }
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception, HttpStatusCode httpStatusCode)

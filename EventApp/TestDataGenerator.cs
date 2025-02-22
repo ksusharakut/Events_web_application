@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Application.UseCases.DTOs;
+﻿using Application.UseCases.DTOs;
 using Domain.Entities;
 
 namespace Application.Tests
 {
     public class TestDataGenerator
     {
-        // Генерация тестовых данных для EventReturnDTO
         public static List<EventReturnDTO> GenerateEventReturnDTOs(int count)
         {
             var events = new List<EventReturnDTO>();
@@ -28,7 +25,6 @@ namespace Application.Tests
             return events;
         }
 
-        // Генерация тестовых данных для сущности Event
         public static List<Event> GenerateEvents(int count)
         {
             var events = new List<Event>();
@@ -49,7 +45,6 @@ namespace Application.Tests
             return events;
         }
 
-        // Генерация тестовых данных для EventDTO
         public static EventDTO GenerateEventDTO()
         {
             return new EventDTO
@@ -63,7 +58,6 @@ namespace Application.Tests
             };
         }
 
-        // Генерация тестового события
         public static Event GenerateEvent(int id = 1, string title = "Test Event")
         {
             return new Event

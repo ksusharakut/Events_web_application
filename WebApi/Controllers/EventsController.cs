@@ -9,7 +9,6 @@ using Domain.Entities;
 using Application.UseCases.Participant.Get;
 using Application.UseCases.EventParticipant.Create;
 using Application.UseCases.EventParticipant.Delete;
-using Application.UseCases.EventParticipant;
 
 namespace WebApi.Controllers
 {
@@ -24,8 +23,6 @@ namespace WebApi.Controllers
         private readonly IUpdateEventUseCase _updateEventUseCase;
         private readonly IGetAllEventsUseCase _getAllEventsUseCase;
         private readonly IUploadEventImageUseCase _uploadEventImageUseCase;
-        private readonly IRegisterParticipantForEventUseCase _registerParticipantForEventUseCase;
-        private readonly IRemoveParticipantFromEventUseCase _removeParticipantFromEventUseCase;
         private readonly IGetParticipantsForEventUseCase _getParticipantsForEventUseCase;
         private readonly IGetEventsByCriteriaUseCase _getEventsByCriteriaUseCase;
 
@@ -36,8 +33,6 @@ namespace WebApi.Controllers
             IUpdateEventUseCase updateEventUseCase,
             IGetAllEventsUseCase getAllEventsUseCase,
             IUploadEventImageUseCase uploadEventImageUseCase,
-            IRegisterParticipantForEventUseCase registerParticipantForEventUseCase,
-            IRemoveParticipantFromEventUseCase removeParticipantFromEventUseCase,
             IGetParticipantsForEventUseCase getParticipantsForEventUseCase,
             IGetEventsByCriteriaUseCase getEventsByCriteriaUseCase
             )
@@ -49,8 +44,6 @@ namespace WebApi.Controllers
             _updateEventUseCase = updateEventUseCase;
             _getAllEventsUseCase = getAllEventsUseCase;
             _uploadEventImageUseCase = uploadEventImageUseCase;
-            _registerParticipantForEventUseCase = registerParticipantForEventUseCase;
-            _removeParticipantFromEventUseCase = removeParticipantFromEventUseCase;
             _getParticipantsForEventUseCase = getParticipantsForEventUseCase;
             _getEventsByCriteriaUseCase = getEventsByCriteriaUseCase;
         }
@@ -61,20 +54,6 @@ namespace WebApi.Controllers
         {
             var participants = await _getParticipantsForEventUseCase.ExecuteAsync(eventId, cancellationToken);
             return Ok(participants);
-        }
-
-        [HttpPost("register")]
-        public async Task<ActionResult> RegisterParticipant([FromBody] RegisterParticipantDTO request, CancellationToken cancellationToken)
-        {
-            await _registerParticipantForEventUseCase.ExecuteAsync(request, cancellationToken);
-            return Ok("Participant successfully registered for the event.");
-        }
-
-        [HttpDelete("unregister")]
-        public async Task<ActionResult> UnregisterParticipant([FromBody] RegisterParticipantDTO request, CancellationToken cancellationToken)
-        {
-            await _removeParticipantFromEventUseCase.ExecuteAsync(request.EventId, cancellationToken);
-            return Ok("Participant successfully unregistered from the event.");
         }
 
         [HttpPost]

@@ -1,10 +1,10 @@
 ﻿using Application.Common;
 using Application.UseCases.DTOs;
-using Application.UseCases.EventParticipant;
 using AutoMapper;
+using Domain.Exceptions;
 using Domain.Interfaces;
 
-namespace Application.UseCases.EventParticipant.Get
+namespace Application.UseCases.Events.Get
 {
     public class GetEventUseCase : IGetEventUseCase
     {
@@ -21,7 +21,18 @@ namespace Application.UseCases.EventParticipant.Get
 
         public async Task<EventReturnDTO> ExecuteAsync(int eventId, CancellationToken cancellationToken)
         {
+            if (eventId <= 0)
+            {
+                throw new ArgumentException("Invalid event ID.", nameof(eventId));
+            }
+
             var eventEntity = await _unitOfWork.EventRepository.GetByIdAsync(eventId, cancellationToken);
+
+            if (eventEntity == null)
+            {
+                throw new NotFoundException($"Event with ID {eventId} not found.");
+            }
+
             var eventDto = _mapper.Map<EventReturnDTO>(eventEntity);
 
             eventDto.ImageUrl = _imagePathService.GetImageUrl(eventDto.ImageUrl);

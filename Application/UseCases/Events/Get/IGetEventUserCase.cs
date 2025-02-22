@@ -1,6 +1,6 @@
 ﻿using Application.UseCases.DTOs;
 
-namespace Application.UseCases.EventParticipant
+namespace Application.UseCases.Events.Get
 {
     public interface IGetEventUseCase
     {

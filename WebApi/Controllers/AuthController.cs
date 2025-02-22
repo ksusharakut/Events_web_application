@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] ParticipantRegistrationDTO request)
         {
             await _registerParticipantUseCase.ExecuteAsync(request, HttpContext.RequestAborted);
