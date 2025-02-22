@@ -6,6 +6,7 @@ using Application.UseCases.Authorization.Register.Validators;
 using Application.UseCases.EventParticipant;
 using Application.UseCases.EventParticipant.Create;
 using Application.UseCases.EventParticipant.Delete;
+using Application.UseCases.EventParticipant.Get;
 using Application.UseCases.Events.Create;
 using Application.UseCases.Events.Delete;
 using Application.UseCases.Events.Get;

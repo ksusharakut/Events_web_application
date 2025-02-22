@@ -9,6 +9,7 @@ using Domain.Entities;
 using Application.UseCases.Participant.Get;
 using Application.UseCases.EventParticipant.Create;
 using Application.UseCases.EventParticipant.Delete;
+using Application.UseCases.EventParticipant;
 
 namespace WebApi.Controllers
 {

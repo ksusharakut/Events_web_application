@@ -1,9 +1,10 @@
 ﻿using Application.Common;
 using Application.UseCases.DTOs;
+using Application.UseCases.EventParticipant;
 using AutoMapper;
-using Domain.Interfaces; 
+using Domain.Interfaces;
 
-namespace Application.UseCases.Events.Get
+namespace Application.UseCases.EventParticipant.Get
 {
     public class GetEventUseCase : IGetEventUseCase
     {
