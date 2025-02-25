@@ -66,7 +66,7 @@ namespace WebApi
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
                 options.EnableSensitiveDataLogging(true);
             });
         }
