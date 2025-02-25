@@ -10,8 +10,6 @@ obj/
 *.userosscache
 *.sln.docstates
 
-# User-specific files
-appsettings.json
 
 # macOS specific
 .DS_Store
