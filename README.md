@@ -36,7 +36,7 @@ Option 1: Running Locally (Without Docker)
 
 2. Update data in appsettings.json file
 
-   "DefaultConnection": "Host=localhost;Port=5432;Database=events;Username=your_username;Password=your_password"
+   "DefaultConnection": "Server=DESKTOP-72EMROF;Database=events_app;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
 
    - Replace your_username and your_password with your PostgreSQL credentials.
 
@@ -52,38 +52,6 @@ Option 1: Running Locally (Without Docker)
 5. Access the API
    Open the following link in your browser:
    https://localhost:7247/swagger (or the port specified in your launchSettings.json).
-
-Option 2: Running with Docker
-
-1. Clone the Repository
-
-git clone repository*
-cd project folder*
-
-2. Update appsettings.json
-
-   "DefaultConnection": "Host=host.docker.internal;Port=5432;Database=events;Username=your_username;Password=your_password"
-
-   - Use host.docker.internal like host!!!!
-
-3. Build and Run with Docker
-
-# Navigate to the project root folder
-
-cd project folder\*
-
-# Build the Docker image
-
-docker build -t myeventapp .
-
-# Run the container
-
-docker run -d -p 8080:80 myeventapp
-
-4. Access the API
-
-Open the following link in your browser:
-http://localhost:8080/swagger
 
 Testing
 
