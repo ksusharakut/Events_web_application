@@ -71,9 +71,11 @@ Option 1: Running Locally (Without Docker)
    Open the following link in your browser:
    https://localhost:7247/swagger (or the port specified in your launchSettings.json).
 
-   Option 1: Running with Docker
 
-1) Clone the Repository
+
+Option 2: Running with Docker
+
+1. Clone the Repository
 
 git clone repository*
 cd project folder*
@@ -102,7 +104,7 @@ cd project folder*
    - Replace your_username and your_password with your PostgreSQL credentials.
    - Update the Jwt section (especially Key) with a secure secret key for production use.
 
-3) Build and Run with Docker
+3. Build and Run with Docker
 
 # Navigate to the project root folder
 
