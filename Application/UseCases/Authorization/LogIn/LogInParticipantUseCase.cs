@@ -28,7 +28,7 @@ namespace Application.UseCases.Authorization.LogIn
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            var participant = await _unitOfWork.AuthRepository.GetByEmailAsync(request.Email, cancellationToken);
+            var participant = await _unitOfWork.ParticipantRepository.GetByEmailAsync(request.Email, cancellationToken);
             if (participant == null || !_passwordHasher.VerifyPassword(request.Password, participant.PasswordHash))
                 throw new AuthenticationFailedException("Invalid email or password.");
 

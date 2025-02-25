@@ -1,4 +1,5 @@
-﻿using Application.UseCases.DTOs;
+﻿using Application.Common;
+using Application.UseCases.DTOs;
 using Application.UseCases.Events.Update;
 using AutoMapper;
 using Domain.Entities;
@@ -19,12 +20,13 @@ namespace Application.Tests
             var mockUnitOfWork = new Mock<IUnitOfWork>();
             var mockMapper = new Mock<IMapper>();
             var mockValidator = new Mock<IValidator<EventDTO>>();
+            var mockFileService = new Mock<IFileService>(); // Мок для IFileService
 
             int eventId = 1;
-            var eventDto = TestDataGenerator.GenerateEventDTO(); 
-            var existingEvent = TestDataGenerator.GenerateEvent(eventId); 
+            var eventDto = TestDataGenerator.GenerateEventDTO();
+            var existingEvent = TestDataGenerator.GenerateEvent(eventId);
 
-            var validationResult = new ValidationResult(); 
+            var validationResult = new ValidationResult();
             mockValidator.Setup(v => v.ValidateAsync(eventDto, It.IsAny<CancellationToken>()))
                          .ReturnsAsync(validationResult);
 
@@ -36,7 +38,7 @@ namespace Application.Tests
             mockUnitOfWork.Setup(uow => uow.EventRepository.UpdateAsync(existingEvent, It.IsAny<CancellationToken>()))
                           .Returns(Task.CompletedTask);
 
-            var useCase = new UpdateEventUseCase(mockUnitOfWork.Object, mockMapper.Object, mockValidator.Object);
+            var useCase = new UpdateEventUseCase(mockUnitOfWork.Object, mockMapper.Object, mockValidator.Object, mockFileService.Object); // Передача mockFileService
 
             // Act
             await useCase.ExecuteAsync(eventId, eventDto, CancellationToken.None);
@@ -55,19 +57,20 @@ namespace Application.Tests
             var mockUnitOfWork = new Mock<IUnitOfWork>();
             var mockMapper = new Mock<IMapper>();
             var mockValidator = new Mock<IValidator<EventDTO>>();
+            var mockFileService = new Mock<IFileService>(); // Мок для IFileService
 
             int eventId = 1;
-            var eventDto = TestDataGenerator.GenerateEventDTO(); 
+            var eventDto = TestDataGenerator.GenerateEventDTO();
 
             var validationErrors = new ValidationFailure[]
             {
                 new ValidationFailure("Title", "Title is required")
             };
-            var validationResult = new ValidationResult(validationErrors); 
+            var validationResult = new ValidationResult(validationErrors);
             mockValidator.Setup(v => v.ValidateAsync(eventDto, It.IsAny<CancellationToken>()))
                          .ReturnsAsync(validationResult);
 
-            var useCase = new UpdateEventUseCase(mockUnitOfWork.Object, mockMapper.Object, mockValidator.Object);
+            var useCase = new UpdateEventUseCase(mockUnitOfWork.Object, mockMapper.Object, mockValidator.Object, mockFileService.Object); // Передача mockFileService
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<ValidationException>(() => useCase.ExecuteAsync(eventId, eventDto, CancellationToken.None));
@@ -86,18 +89,19 @@ namespace Application.Tests
             var mockUnitOfWork = new Mock<IUnitOfWork>();
             var mockMapper = new Mock<IMapper>();
             var mockValidator = new Mock<IValidator<EventDTO>>();
+            var mockFileService = new Mock<IFileService>(); // Мок для IFileService
 
             int eventId = 1;
-            var eventDto = TestDataGenerator.GenerateEventDTO(); 
+            var eventDto = TestDataGenerator.GenerateEventDTO();
 
-            var validationResult = new ValidationResult(); 
+            var validationResult = new ValidationResult();
             mockValidator.Setup(v => v.ValidateAsync(eventDto, It.IsAny<CancellationToken>()))
                          .ReturnsAsync(validationResult);
 
             mockUnitOfWork.Setup(uow => uow.EventRepository.GetByIdAsync(eventId, It.IsAny<CancellationToken>()))
                           .ReturnsAsync((Event)null);
 
-            var useCase = new UpdateEventUseCase(mockUnitOfWork.Object, mockMapper.Object, mockValidator.Object);
+            var useCase = new UpdateEventUseCase(mockUnitOfWork.Object, mockMapper.Object, mockValidator.Object, mockFileService.Object); // Передача mockFileService
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<NotFoundException>(() => useCase.ExecuteAsync(eventId, eventDto, CancellationToken.None));

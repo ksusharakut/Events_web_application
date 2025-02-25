@@ -17,20 +17,11 @@ namespace Infrastructure.Repositories
         public async Task AddAsync(Event eventEntity, CancellationToken cancellationToken)
         {
             await _context.Events.AddAsync(eventEntity, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(Event eventEntity, CancellationToken cancellationToken)
         {
             _context.Events.Remove(eventEntity);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-
-        public async Task UpdateImagePathAsync(Event eventEntity, string imagePath, CancellationToken cancellationToken)
-        {
-            eventEntity.ImageUrl = imagePath;
-            _context.Events.Update(eventEntity);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Event>> GetAllAsync(CancellationToken cancellationToken, int pageNumber, int pageSize)
@@ -54,7 +45,6 @@ namespace Infrastructure.Repositories
         public async Task UpdateAsync(Event eventEntity, CancellationToken cancellationToken)
         {
             _context.Events.Update(eventEntity);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<List<Event>> GetEventsByFiltersAsync(DateTime? date, string location, string category, CancellationToken cancellationToken)

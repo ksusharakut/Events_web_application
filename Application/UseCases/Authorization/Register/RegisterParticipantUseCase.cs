@@ -34,7 +34,7 @@ namespace Application.UseCases.Authorization.Register
                 throw new ValidationException(validationResult.Errors);
             }
 
-            var existingParticipant = await _unitOfWork.AuthRepository.GetByEmailAsync(request.Email, cancellationToken);
+            var existingParticipant = await _unitOfWork.ParticipantRepository.GetByEmailAsync(request.Email, cancellationToken);
             if (existingParticipant != null)
             {
                 throw new ConflictException("Email is already in use.");

@@ -1,4 +1,5 @@
-﻿using Application.UseCases.Events.Delete;
+﻿using Application.Common;
+using Application.UseCases.Events.Delete;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
@@ -13,9 +14,10 @@ namespace Application.Tests
         {
             // Arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
+            var mockFileService = new Mock<IFileService>(); // Мок для IFileService
 
             int eventId = 1;
-            var eventEntity = TestDataGenerator.GenerateEvent(eventId); 
+            var eventEntity = TestDataGenerator.GenerateEvent(eventId);
 
             mockUnitOfWork.Setup(uow => uow.EventRepository.GetByIdAsync(eventId, It.IsAny<CancellationToken>()))
                           .ReturnsAsync(eventEntity);
@@ -23,7 +25,7 @@ namespace Application.Tests
             mockUnitOfWork.Setup(uow => uow.EventRepository.DeleteAsync(eventEntity, It.IsAny<CancellationToken>()))
                           .Returns(Task.CompletedTask);
 
-            var useCase = new DeleteEventUseCase(mockUnitOfWork.Object);
+            var useCase = new DeleteEventUseCase(mockUnitOfWork.Object, mockFileService.Object); // Передача mockFileService
 
             // Act
             await useCase.ExecuteAsync(eventId, CancellationToken.None);
@@ -38,13 +40,14 @@ namespace Application.Tests
         {
             // Arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
+            var mockFileService = new Mock<IFileService>(); // Мок для IFileService
 
             int eventId = 1;
 
             mockUnitOfWork.Setup(uow => uow.EventRepository.GetByIdAsync(eventId, It.IsAny<CancellationToken>()))
                           .ReturnsAsync((Event)null);
 
-            var useCase = new DeleteEventUseCase(mockUnitOfWork.Object);
+            var useCase = new DeleteEventUseCase(mockUnitOfWork.Object, mockFileService.Object); // Передача mockFileService
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<NotFoundException>(() => useCase.ExecuteAsync(eventId, CancellationToken.None));

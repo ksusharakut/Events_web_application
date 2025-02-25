@@ -1,11 +1,13 @@
-﻿using Application.UseCases.DTOs;
-using FluentValidation;
+﻿using FluentValidation;
+using Application.UseCases.DTOs;
+using Application.Common;
 
-namespace Application.UseCases.Events.Update.Validation
+
+namespace Application.UseCases.Events.Validation
 {
-    public class UpdateEventValidator : AbstractValidator<EventDTO>
+    public class EventValidator : AbstractValidator<EventDTO>
     {
-        public UpdateEventValidator()
+        public EventValidator()
         {
             RuleFor(e => e.Title)
                 .NotEmpty().WithMessage("Title is required.")
@@ -26,6 +28,15 @@ namespace Application.UseCases.Events.Update.Validation
 
             RuleFor(e => e.MaxParticipants)
                 .GreaterThan(0).WithMessage("Max participants must be greater than zero.");
+
+            When(e => e.ImageFile != null, () =>
+            {
+                RuleFor(e => e.ImageFile)
+                    .Must(file => file.Length > 0).WithMessage("Image file cannot be empty.")
+                    .Must(file => file.Length <= FileConstants.MaxFileSize).WithMessage($"File size must not exceed {FileConstants.MaxFileSize / 1024 / 1024} MB.")
+                    .Must(file => FileConstants.AllowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
+                    .WithMessage($"Invalid file type. Allowed types: {string.Join(", ", FileConstants.AllowedExtensions)}.");
+            });
         }
     }
 }

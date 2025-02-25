@@ -22,7 +22,6 @@ namespace WebApi.Controllers
         private readonly IDeleteEventUseCase _deleteEventUseCase;
         private readonly IUpdateEventUseCase _updateEventUseCase;
         private readonly IGetAllEventsUseCase _getAllEventsUseCase;
-        private readonly IUploadEventImageUseCase _uploadEventImageUseCase;
         private readonly IGetParticipantsForEventUseCase _getParticipantsForEventUseCase;
         private readonly IGetEventsByCriteriaUseCase _getEventsByCriteriaUseCase;
 
@@ -32,7 +31,6 @@ namespace WebApi.Controllers
             IDeleteEventUseCase deleteEventUseCase,
             IUpdateEventUseCase updateEventUseCase,
             IGetAllEventsUseCase getAllEventsUseCase,
-            IUploadEventImageUseCase uploadEventImageUseCase,
             IGetParticipantsForEventUseCase getParticipantsForEventUseCase,
             IGetEventsByCriteriaUseCase getEventsByCriteriaUseCase
             )
@@ -43,7 +41,6 @@ namespace WebApi.Controllers
             _deleteEventUseCase = deleteEventUseCase;
             _updateEventUseCase = updateEventUseCase;
             _getAllEventsUseCase = getAllEventsUseCase;
-            _uploadEventImageUseCase = uploadEventImageUseCase;
             _getParticipantsForEventUseCase = getParticipantsForEventUseCase;
             _getEventsByCriteriaUseCase = getEventsByCriteriaUseCase;
         }
@@ -58,7 +55,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<IActionResult> CreateEvent([FromBody] EventDTO eventDto, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateEvent([FromForm] EventDTO eventDto, CancellationToken cancellationToken)
         {
             await _createEventUseCase.ExecuteAsync(eventDto, cancellationToken);
             return Ok("Event created successfully.");
@@ -86,7 +83,7 @@ namespace WebApi.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<IActionResult> UpdateEvent(int id, [FromBody] EventDTO eventDto, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateEvent(int id, [FromForm] EventDTO eventDto, CancellationToken cancellationToken)
         {
             await _updateEventUseCase.ExecuteAsync(id, eventDto, cancellationToken);
             return Ok("Event updated successfully.");
@@ -98,15 +95,6 @@ namespace WebApi.Controllers
             var events = await _getAllEventsUseCase.ExecuteAsync(cancellationToken, pageNumber, pageSize);
             return Ok(events);
         }
-
-        [HttpPost("{eventId}/upload-image")]
-        [Authorize(Policy = "AdminOnly")]
-        public async Task<IActionResult> UploadImage(int eventId, IFormFile imageFile, CancellationToken cancellationToken)
-        {
-            await _uploadEventImageUseCase.ExecuteAsync(eventId, imageFile, cancellationToken);
-            return Ok("Image uploaded successfully.");
-        }
-
 
         [HttpGet("filter")]
         public async Task<ActionResult<List<EventReturnDTO>>> GetEventsByCriteria(

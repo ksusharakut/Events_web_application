@@ -6,7 +6,7 @@ namespace Application.UseCases.Authorization.Register.Validators
 {
     public class RegisterParticipantValidator : AbstractValidator<ParticipantRegistrationDTO>
     {
-        public RegisterParticipantValidator(IAgeValidationService ageValidationService)
+        public RegisterParticipantValidator(IUserValidationService ageValidationService)
         {
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("Name is required.")
@@ -16,7 +16,7 @@ namespace Application.UseCases.Authorization.Register.Validators
             RuleFor(p => p.BirthDay)
                 .NotEmpty().WithMessage("BirthDay is required.")
                 .LessThan(DateTime.Today).WithMessage("Birthday must be in the past.")
-                .Must(ageValidationService.IsAtLeast18YearsOld)
+                .Must(ageValidationService.IsUserOldEnough)
                 .WithMessage("Participant must be at least 18 years old.");
 
             RuleFor(x => x.Email)

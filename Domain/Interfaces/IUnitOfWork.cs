@@ -7,8 +7,6 @@ namespace Domain.Interfaces
         IParticipantRepository ParticipantRepository { get; }
         IParticipantEventRepository ParticipantEventRepository { get; }
 
-        IAuthRepository AuthRepository { get; }
-
         Task SaveChangesAsync(CancellationToken cancellationToken); 
     }
 }

@@ -44,13 +44,11 @@ namespace Infrastructure.Repositories
         public async Task RegisterAsync(ParticipantEvent participantEvent, CancellationToken cancellationToken)
         {
             await _context.ParticipantEvents.AddAsync(participantEvent, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task RemoveAsync(ParticipantEvent participantEvent, CancellationToken cancellationToken)
         {
             _context.ParticipantEvents.Remove(participantEvent);  
-            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 

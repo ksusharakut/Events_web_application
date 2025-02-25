@@ -10,6 +10,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSwaggerConfiguration();
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddRepositories();
+builder.Services.AddAutoMapperProfiles();
 builder.Services.AddApplicationServices();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 

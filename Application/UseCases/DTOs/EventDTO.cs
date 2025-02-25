@@ -1,4 +1,6 @@
-﻿namespace Application.UseCases.DTOs
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Application.UseCases.DTOs
 {
     public class EventDTO
     {
@@ -8,5 +10,6 @@
         public string Location { get; set; }
         public string Category { get; set; }
         public int MaxParticipants { get; set; }
+        public IFormFile? ImageFile { get; set; }
     }
 }

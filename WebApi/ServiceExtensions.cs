@@ -1,8 +1,10 @@
 ﻿using Application.Common;
 using Application.UseCases.Authorization.LogIn;
+using Application.UseCases.Authorization.LogIn.Validators;
 using Application.UseCases.Authorization.RefreshToken;
 using Application.UseCases.Authorization.Register;
 using Application.UseCases.Authorization.Register.Validators;
+using Application.UseCases.DTOs;
 using Application.UseCases.EventParticipant;
 using Application.UseCases.EventParticipant.Create;
 using Application.UseCases.EventParticipant.Delete;
@@ -10,6 +12,7 @@ using Application.UseCases.Events.Create;
 using Application.UseCases.Events.Delete;
 using Application.UseCases.Events.Get;
 using Application.UseCases.Events.Update;
+using Application.UseCases.Events.Validation;
 using Application.UseCases.Participant.Get;
 using Domain.Enums;
 using Domain.Interfaces;
@@ -20,6 +23,7 @@ using Infrastructure.Persistance.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -72,28 +76,23 @@ namespace WebApi
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IParticipantRepository, ParticipantRepository>();
             services.AddScoped<IParticipantEventRepository, ParticipantEventRepository>();
-            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         public static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IFileValidator, FileValidator>();
             services.AddScoped<ILogInParticipantUseCase, LogInParticipantUseCase>();
             services.AddScoped<IRefreshTokenUseCase, RefreshTokenUseCase>();
             services.AddScoped<IRegisterParticipantUseCase, RegisterParticipantUseCase>();
             services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
-            services.AddScoped<IAgeValidationService, AgeValidationService>();
-            services.AddAutoMapper(typeof(ParticipantMappingProfile));
-            services.AddAutoMapper(typeof(EventMappingProfile));
+            services.AddScoped<IUserValidationService, UserValidationService>();
             services.AddValidatorsFromAssemblyContaining<RegisterParticipantValidator>();
             services.AddScoped<ICreateEventUseCase, CreateEventUseCase>();
             services.AddScoped<IGetEventUseCase, GetEventUseCase>();
             services.AddScoped<IGetEventByTitleUseCase, GetEventByTitleUseCase>();
             services.AddScoped<IDeleteEventUseCase, DeleteEventUseCase>();
             services.AddScoped<IUpdateEventUseCase, UpdateEventUseCase>();
-            services.AddScoped<IUploadEventImageUseCase, UploadEventImageUseCase>();
             services.AddScoped<IGetAllEventsUseCase, GetAllEventsUseCase>();
             services.AddScoped<IImagePathService, ImagePathService>();
             services.AddScoped<IGetParticipantUseCase, GetParticipantUseCase>();
@@ -103,6 +102,14 @@ namespace WebApi
             services.AddScoped<IGetEventsByCriteriaUseCase, GetEventsByCriteriaUseCase>();
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddValidatorsFromAssemblyContaining<EventValidator>();
+            services.AddValidatorsFromAssemblyContaining<LoginParticipantValidator>();
+        }
+
+        public static void AddAutoMapperProfiles(this IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(EventDTOToEventMappingProfile).Assembly);
         }
 
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)

@@ -10,7 +10,6 @@ namespace Domain.Interfaces.RepositoryInterfaces
         Task AddAsync(Event eventEntity, CancellationToken cancellationToken);
         Task UpdateAsync(Event eventEntity, CancellationToken cancellationToken);
         Task DeleteAsync(Event eventEntity, CancellationToken cancellationToken);
-        Task UpdateImagePathAsync(Event eventEntity, string imagePath, CancellationToken cancellationToken);
         Task<List<Event>> GetEventsByFiltersAsync(DateTime? date, string location, string category, CancellationToken cancellationToken);
     }
 }

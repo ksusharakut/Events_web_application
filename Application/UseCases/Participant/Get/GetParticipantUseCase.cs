@@ -18,7 +18,7 @@ namespace Application.UseCases.Participant.Get
 
         public async Task<ParticipantReturnDTO> ExecuteAsync(int participantId, CancellationToken cancellationToken)
         {
-            var participantEntity = await _unitOfWork.EventRepository.GetByIdAsync(participantId, cancellationToken);
+            var participantEntity = await _unitOfWork.ParticipantRepository.GetByIdAsync(participantId, cancellationToken);
             if (participantEntity == null)
             {
                 throw new NotFoundException($"No user with id {participantId}.");

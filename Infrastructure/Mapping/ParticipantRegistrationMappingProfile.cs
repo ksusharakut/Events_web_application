@@ -4,13 +4,11 @@ using Domain.Entities;
 
 namespace Infrastructure.Mapping
 {
-    public class ParticipantMappingProfile : Profile
+    public class ParticipantRegistrationMappingProfile : Profile
     {
-        public ParticipantMappingProfile() 
+        public ParticipantRegistrationMappingProfile()
         {
             CreateMap<ParticipantRegistrationDTO, Participant>();
-
-            CreateMap<Participant, ParticipantReturnDTO>();
         }
     }
 }

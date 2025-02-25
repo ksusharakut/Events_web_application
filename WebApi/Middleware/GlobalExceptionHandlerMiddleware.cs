@@ -10,6 +10,19 @@ namespace WebApi.Middlware
         private readonly RequestDelegate _next;
         private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
 
+        private static readonly Dictionary<Type, HttpStatusCode> ExceptionStatusCodes = new()
+        {
+            { typeof(ValidationException), HttpStatusCode.BadRequest },
+            { typeof(NotRegisteredException), HttpStatusCode.BadRequest },
+            { typeof(ArgumentException), HttpStatusCode.BadRequest },
+            { typeof(AuthenticationFailedException), HttpStatusCode.Unauthorized },
+            { typeof(InvalidTokenException), HttpStatusCode.Unauthorized },
+            { typeof(ForbiddenException), HttpStatusCode.Forbidden },
+            { typeof(NotFoundException), HttpStatusCode.NotFound },
+            { typeof(ConflictException), HttpStatusCode.Conflict },
+            { typeof(LimitExceededException), HttpStatusCode.TooManyRequests }
+        };
+
         public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
         {
             _next = next;
@@ -22,47 +35,14 @@ namespace WebApi.Middlware
             {
                 await _next(httpContext);
             }
-            catch (ValidationException ex)
-            {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest); // 400 Bad Request
-            }
-            catch (AuthenticationFailedException ex)
-            {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.Unauthorized); // 401 Unauthorized
-            }
-            catch (InvalidTokenException ex)
-            {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.Unauthorized); // 401 Unauthorized
-            }
-            catch (ForbiddenException ex)
-            {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.Forbidden); // 403 Forbidden
-            }
-            catch (NotFoundException ex)
-            {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.NotFound); // 404 Not Found
-            }
-            catch (NotRegisteredException ex)
-            {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest); // 400 Bad Request
-            }
-            catch (ArgumentException ex)
-            {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest); // 400 Bad Request
-            }
-            catch (ConflictException ex)
-            {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.Conflict); // 409 Conflict
-            }
-            catch (LimitExceededException ex)
-            {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.TooManyRequests); // 429 Too Many Requests
-            }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError); // 500 Internal Server Error
-            }
+                var statusCode = ExceptionStatusCodes.TryGetValue(ex.GetType(), out var code)
+                    ? code
+                    : HttpStatusCode.InternalServerError;
 
+                await HandleExceptionAsync(httpContext, ex, statusCode);
+            }
         }
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception, HttpStatusCode httpStatusCode)
