@@ -1,65 +1,39 @@
-Event Management API
+Как запустить приложение
+1. Скачайте проект
+Склонируйте репозиторий командой git clone https://github.com/yourusername/events-web-application.git, затем перейдите в папку проекта командой cd events-web-application.
 
-This is a web application for managing events and participants. Features include:
-Creating, updating, deleting, and filtering events
-Registering participants, canceling participation, and viewing the list of participants
-Authentication and authorization via JWT
+2. Проверьте ресурсы
+Убедитесь, что на компьютере есть минимум 4 ГБ свободной памяти (в диспетчере задач на вкладке "Производительность").
+Откройте Docker Desktop → Settings → Resources и выделите Docker минимум 4 ГБ памяти.
+3. Запустите приложение
+В корневой папке проекта (где лежат Dockerfile и docker-compose.yml) выполните команду docker-compose up --build. Это соберёт и запустит приложение и базу данных.
 
-Technologies
+Приложение будет доступно по адресу http://localhost:5000.
+База данных — на localhost:1433 (если нужно подключиться извне).
+4. Настройка базы данных (если нужно)
+Если база EventsDb ещё не создана:
 
-.NET 8.0
-ASP.NET Core Web API
-Entity Framework Core + PostgreSQL
-AutoMapper
-FluentValidation
-JWT
-Swagger
-EF Fluent API
-xUnit
-Docker
+Запустите только базу командой docker-compose up -d mssql.
+Примените миграции командой dotnet ef database update --project Infrastructure --startup-project WebApi (для этого временно измените строку подключения в appsettings.json на Server=localhost,1433;User Id=sa;Password=fiug2787tfgyfFtftyxnjb;TrustServerCertificate=True).
+Перезапустите всё командой docker-compose down и затем docker-compose up --build.
+5. Остановка
+Чтобы остановить приложение, выполните docker-compose down. Если нужно удалить данные базы, добавьте -v: docker-compose down -v.
 
-Architecture
+Подробности настройки
+WebAPI работает на порту 5000 (снаружи) и 80 (внутри контейнера).
+MSSQL использует образ 2019-latest, логин sa и пароль fiug2787tfgyfFtftyxnjb.
+Данные базы сохраняются в томе mssql-data.
+Если что-то не работает
+База не запускается из-за памяти
+Если в логах написано "requires at least 2000 megabytes of memory":
 
-The project follows the Clean Architecture principle and includes:
-Domain – business logic and entities
-Application – interfaces and services
-Infrastructure – database operations and repositories
-WebAPI – REST API
+Освободите память на компьютере (закройте лишние программы).
+Увеличьте память в Docker Desktop до 4 ГБ и перезапустите docker-compose up --build.
+Приложение не подключается к базе
+Проверьте логи базы командой docker logs events_web_application-mssql-1.
+Убедитесь, что в строке подключения указано Server=mssql.
+Другие проблемы
+Посмотрите логи командой docker-compose logs и обратитесь за помощью, если что-то непонятно.
 
-Installation and Running
-
-Option 1: Running Locally (Without Docker)
-
-1. Clone the Repository
-   git clone repository*
-   cd projectfolder*
-
-2. Update data in appsettings.json file
-
-   "DefaultConnection": "Server=DESKTOP-72EMROF;Database=events_app;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
-
-   - Replace your_username and your_password with your PostgreSQL credentials.
-
-3. Apply Database Migrations
-   Ensure you have the .NET CLI installed, then run the following command from the project root folder to create or update the database:
-
-   dotnet ef database update --project Infrastructure
-
-4. Run the Application
-   Start the application using the .NET CLI:
-   dotnet run --project WebAPI
-
-5. Access the API
-   Open the following link in your browser:
-   https://localhost:7247/swagger (or the port specified in your launchSettings.json).
-
-Testing
-
-Run unit tests:
-dotnet test
-
-Additional Information
-
-API documentation is available in Swagger (/swagger).
-Bcrypt is used for password hashing.
-All controllers follow the "Controller without logic" principle.
+Для разработки без Docker
+Если хотите запустить локально, обновите строку подключения в appsettings.json под вашу базу (например, Server=localhost;...) и запускайте через dotnet run в папке WebApi.
